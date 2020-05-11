@@ -8,17 +8,60 @@
 import tkinter as tk
 from tkinter import filedialog
 from tkinter import messagebox
+from tkinter import *
 
 import os
 from PyQt5 import QtCore, QtGui, QtWidgets
-root = tk.Tk()
+root = Tk()
+
+
 root.withdraw()
+class text_box(object):
+    def __init__(self, title, text=None):
+        if text == None:
+            self.Text = list()
+        else:
+            self.Text = list(text)
+        self.Title=str(title)
+    def setupUi(self, MainWindow):
+        MainWindow.setObjectName("MainWindow")
+        MainWindow.resize(800, 800)
+        self.centralwidget = QtWidgets.QWidget(MainWindow)
+        self.centralwidget.setObjectName("centralwidget")
+        self.textEdit = QtWidgets.QTextEdit(self.centralwidget)
+        self.textEdit.setGeometry(QtCore.QRect(100, 100, 600, 500))
+        self.textEdit.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
+        self.textEdit.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
+        self.textEdit.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContentsOnFirstShow)
+        self.textEdit.setObjectName("textEdit")
+        MainWindow.setCentralWidget(self.centralwidget)
+        self.menubar = QtWidgets.QMenuBar(MainWindow)
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 21))
+        self.menubar.setObjectName("menubar")
+        MainWindow.setMenuBar(self.menubar)
+        self.statusbar = QtWidgets.QStatusBar(MainWindow)
+        self.statusbar.setObjectName("statusbar")
+        MainWindow.setStatusBar(self.statusbar)
+        self.print()
+        self.retranslateUi(MainWindow)
+        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+    def print(self):
+        for i in range(len(self.Text)):
+           self.textEdit.insertPlainText (self.Text[i])
+           self.textEdit.insertPlainText("\n")
+
+    def retranslateUi(self, MainWindow):
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate("MainWindow", self.Title))
+
+
 
 
 class Ui_MainWindow(object):
     def __init__(self):
         self.paths = list()
         self.files=list()
+        self.window=list()
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(845, 505)
@@ -61,6 +104,18 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
+    def print_text_box_value(self,x):
+        m=self.files[x]
+        path=self.paths[x]
+        ind=path.rfind('/')
+        title=path[ind+1:]
+
+        self.window.append(QtWidgets.QMainWindow())
+        self.ui = text_box(title,m)
+        self.ui.setupUi(self.window[len(self.window)-1])
+        self.window[len(self.window)-1].show()
+
+
     def sent_tokenize(self):
         for file in self.paths:
             f = open(file, 'r')
@@ -81,6 +136,7 @@ class Ui_MainWindow(object):
 
             for file in entries:
                 self.paths.append(file_path + '/' + file)
+            self.sent_tokenize()
 
         except TypeError:
             messagebox.showerror('Error', "Please make sure that the folder has txt files only")
@@ -103,4 +159,5 @@ if __name__ == "__main__":
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
     MainWindow.show()
+    mainloop()
     sys.exit(app.exec_())

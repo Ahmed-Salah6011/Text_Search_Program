@@ -110,14 +110,19 @@ class Series:
         return self.size()==0
 
     def items(self):
-        """return list for traversing through it"""
-        return self.N_list
+        """return list of tuples (key,value)
+         for traversing through it"""
+        l=list()
+        for node in self.N_list:
+            t=(node.key,node.value)
+            l.append(t)
+        return l
 
 
-
+##testing
 s=Series()
 s.insert_order('x',5)
 s.insert_order('a',5)
 s.insert_order('x',4)
-for node in s.items():
-    print(node)
+for key,val in s.items():
+    print(key)

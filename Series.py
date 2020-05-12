@@ -75,6 +75,9 @@ class Series:
 
 
 
+    def update(self,index,val):
+        """update the series by index"""
+        self.N_list[index].value=val
 
     def insert(self,key,val):
         """take key & value

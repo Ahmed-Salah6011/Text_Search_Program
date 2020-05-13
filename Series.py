@@ -47,13 +47,58 @@ class Series:
 
             return None
 
+    def size(self):
+        """get the length of the list"""
+        return len(self.N_list)
 
     def binary_search(self,key):
         """find the element with the given key & return val if the key exist and
         if not exist return None"""
+        self.sort(0,self.size()-1)
+        self.start=0
+        self.end=self.size()-1
+        while(self.start<=self.end):
+            self.middle=int((self.start+self.end)/2)
+            if(self.N_list[self.middle].key==key):
+                return 1
+            elif(self.N_list[self.middle].key<key):
+                self.start=self.middle+1
 
-    def sort(self):
+            elif(self.N_list[self.middle].key>key):
+                self.end = self.middle - 1
+            return -1
+
+
+
+    def partition(self,start,end):
+        """this function will help me in quick_sorting"""
+        self.i=start
+        self.j=end
+        self.pivot=self.i
+        for m in range(len(self.N_list)-1):
+            if(self.N_list[self.pivot].key>self.N_list[self.j].key ):
+                self.N_list[self.j], self.N_list[self.pivot] = self.N_list[self.pivot], self.N_list[self.j]
+                self.pivot = self.j
+                self.i = self.i + 1
+            elif(self.N_list[self.pivot].key < self.N_list[self.i].key):
+                self.N_list[self.i], self.N_list[self.pivot] = self.N_list[self.pivot], self.N_list[self.i]
+                self.pivot = self.i
+                self.j = self.j - 1
+            else:
+                if(self.pivot==self.i and self.j!=self.i):
+                    self.j = self.j - 1
+                elif(self.pivot==self.j and self.j!=self.i):
+                    self.i = self.i + 1
+        return self.pivot
+
+
+    def sort(self,start,end):
         """sort the elements by key"""
+        if(start<end):
+            piv=self.partition(start,end)
+            self.sort(start,piv-1)
+            self.sort(piv+1, end)
+
 
     def insert_order(self,key,val):
         """take key & value
@@ -79,7 +124,7 @@ class Series:
         """update the series by index"""
         self.N_list[index].value=val
 
-    def insert(self,key,val):
+    def insert(self,Key,Val):
         """take key & value
         first check if the key existed or not
         if existed : update the value of existed key with (val)
@@ -104,9 +149,7 @@ class Series:
     def values(self):
         """get list of all values"""
 
-    def size(self):
-        """get the length of the list"""
-        return len(self.N_list)
+
 
     def is_empty(self):
         """check if the series is empty"""
@@ -122,10 +165,3 @@ class Series:
         return l
 
 
-##testing
-s=Series()
-s.insert_order('x',5)
-s.insert_order('a',5)
-s.insert_order('x',4)
-for key,val in s.items():
-    print(key)

@@ -54,7 +54,7 @@ class Series:
         else:
             low=0
             high=len(self.N_list)-1
-            while(low<high):
+            while(low<=high):
                 mid=(low+high)//2
                 if(self.N_list[mid].key == key):
                     return mid
@@ -134,10 +134,35 @@ class Series:
             if (self.is_empty()):
                 self.N_list.append(n)
             else:
+                old = len(self.N_list)
                 for i in range(len(self.N_list)):
                     if self.N_list[i].key > key:
                         self.N_list.insert(i,n)
                         break
+                if (old == len(self.N_list)):
+                    self.N_list.append(n)
+
+    def insert_set(self,key,file_id):
+        """take key & value
+        first check if the key existed or not
+        if existed : update the value of existed key with (val)
+        if not existed : create new node with the key & val then insert the node (in order) in the N_list"""
+        ind=self.find(key)
+        if(ind != None): ##key exist
+            self.N_list[ind].value.add(file_id)
+        else:
+            s={file_id}
+            n=Node(key,s)
+            if (self.is_empty()):
+                self.N_list.append(n)
+            else:
+                old=len(self.N_list)
+                for i in range(len(self.N_list)):
+                    if self.N_list[i].key > key:
+                        self.N_list.insert(i,n)
+                        break
+                if(old == len(self.N_list)):
+                    self.N_list.append(n)
 
 
 
@@ -156,10 +181,6 @@ class Series:
         else:
             q=Node(Key,Val)
             self.N_list.append(q)
-
-
-
-
 
     def delete(self,key):
         """delete the element with the given key from the N_list"""
@@ -201,4 +222,3 @@ class Series:
             t=(node.key,node.value)
             l.append(t)
         return l
-

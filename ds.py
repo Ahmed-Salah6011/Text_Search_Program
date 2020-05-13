@@ -87,12 +87,23 @@ class Ui_MainWindow(object):
         self.label_6.setObjectName("label_6")
 
         self.label_7 = QtWidgets.QLabel(self.centralwidget)
-        self.label_7.setGeometry(QtCore.QRect(580, 170, 110, 61))
+        self.label_7.setGeometry(QtCore.QRect(590, 185, 130, 61))
         self.label_7.setStyleSheet("font: 20pt \"MV Boli\";\n"
-                                   "background:#bebede;\n"
                                    "color:blue;\n"
                                    "border-radius:12px;")
         self.label_7.setObjectName("label_7")
+
+
+        ##
+        self.label_8 = QtWidgets.QLabel(self.centralwidget)
+        self.label_8.setGeometry(QtCore.QRect(620, 255, 110, 61))
+        self.label_8.setStyleSheet("font: 20pt \"MV Boli\";\n"
+                                   "color:blue;\n"
+                                   "border-radius:12px;")
+        self.label_8.setObjectName("label_8")
+        self.label_8.hide()
+        ##
+
 
         self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_2.setGeometry(QtCore.QRect(30, 250, 191, 61))
@@ -165,6 +176,7 @@ class Ui_MainWindow(object):
 
     def select(self):
         try:
+            self.label_8.hide()
             self.paths=list()
             self.library=DS.Series()
             self.count=0
@@ -182,6 +194,7 @@ class Ui_MainWindow(object):
 
             self.progress.setMaximum(len(self.paths))
             self.build_series()
+            self.label_8.show()
             #print(self.library.items())
 
 
@@ -211,7 +224,8 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Text Search Tool"))
         self.label_6.setText(_translate("MainWindow", "  Enter the word here"))
-        self.label_7.setText(_translate("MainWindow", "Progress"))
+        self.label_7.setText(_translate("MainWindow", "Processing"))
+        self.label_8.setText(_translate("MainWindow", "Done"))
         self.pushButton_2.setText(_translate("MainWindow", "Search"))
         self.pushButton_3.setText(_translate("MainWindow", "Select Folder"))
 

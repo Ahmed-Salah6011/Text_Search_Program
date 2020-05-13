@@ -10,6 +10,8 @@ from tkinter import filedialog
 from tkinter import messagebox
 from tkinter import *
 import Series as DS
+import string
+
 
 
 import os
@@ -63,6 +65,7 @@ class Ui_MainWindow(object):
         self.paths = list()
         self.files=list()
         self.window=list()
+        self.library=DS.Series()
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(845, 505)
@@ -124,6 +127,16 @@ class Ui_MainWindow(object):
             t = text.split('\n')
             self.files.append(t)
 
+    def build_series(self):
+        for x in range(len(self.files)):
+            for y in self.files[x]:
+                temp = y.split()
+                for z in temp:
+                    after_edit = z.translate(str.maketrans('', '', string.punctuation))
+                    if not after_edit == '':
+                        self.library.insert_set(after_edit, x)
+
+
     def select(self):
         try:
             file_path = filedialog.askdirectory()
@@ -137,6 +150,8 @@ class Ui_MainWindow(object):
             for file in entries:
                 self.paths.append(file_path + '/' + file)
             self.sent_tokenize()
+            self.build_series()
+            print(self.library.items())
 
 
 

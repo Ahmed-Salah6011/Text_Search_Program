@@ -59,7 +59,7 @@ class Series:
         while(self.start<=self.end):
             self.middle=int((self.start+self.end)/2)
             if(self.N_list[self.middle].key==key):
-                return key
+                return self.N_list[self.middle].value
             elif(self.N_list[self.middle].key<key):
                 self.start=self.middle+1
 

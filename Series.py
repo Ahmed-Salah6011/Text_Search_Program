@@ -54,19 +54,18 @@ class Series:
     def binary_search(self,key):
         """find the element with the given key & return val if the key exist and
         if not exist return None"""
-        self.sort(0,self.size()-1)
         self.start=0
         self.end=self.size()-1
         while(self.start<=self.end):
             self.middle=int((self.start+self.end)/2)
             if(self.N_list[self.middle].key==key):
-                return 1
+                return key
             elif(self.N_list[self.middle].key<key):
                 self.start=self.middle+1
 
             elif(self.N_list[self.middle].key>key):
                 self.end = self.middle - 1
-            return -1
+            return None
 
 
 
@@ -75,7 +74,7 @@ class Series:
         self.i=start
         self.j=end
         self.pivot=self.i
-        for m in range(end):
+        for m in range(end-start):
             if(self.N_list[self.pivot].key>self.N_list[self.j].key ):
                 self.N_list[self.j], self.N_list[self.pivot] = self.N_list[self.pivot], self.N_list[self.j]
                 self.pivot = self.j
@@ -91,13 +90,15 @@ class Series:
                     self.i = self.i + 1
         return self.pivot
 
+    def sort(self):
+        self.sort_ex(0,self.size()-1)
 
-    def sort(self,start,end):
+    def sort_ex(self,start,end):
         """sort the elements by key"""
         if(start<end):
             piv=self.partition(start,end)
-            self.sort(start,piv-1)
-            self.sort(piv+1, end)
+            self.sort_ex(start,piv-1)
+            self.sort_ex(piv+1, end)
 
 
     def insert_order(self,key,val):
@@ -188,7 +189,7 @@ s.insert("z",21)
 s.insert("salah",22)
 s.insert('zz',10)
 s.insert('l',10)
-s.sort(0,s.size()-1)
+s.sort()
 print(s.keys())
 print(s.values())
 

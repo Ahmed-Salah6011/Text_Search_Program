@@ -78,16 +78,23 @@ class Ui_MainWindow(object):
         self.textEdit_7.setGeometry(QtCore.QRect(30, 160, 341, 61))
         self.textEdit_7.setStyleSheet("font: 14pt \"MS Shell Dlg 2\";")
         self.textEdit_7.setObjectName("textEdit_7")
+        ##
+        self.textEdit_8 = QtWidgets.QTextEdit(self.centralwidget)
+        self.textEdit_8.setGeometry(QtCore.QRect(440, 140, 341, 200))
+        self.textEdit_8.setStyleSheet("font: 14pt \"MS Shell Dlg 2\";")
+        self.textEdit_8.setObjectName("textEdit_8")
+        ##
         self.label_6 = QtWidgets.QLabel(self.centralwidget)
-        self.label_6.setGeometry(QtCore.QRect(20, 80, 461, 61))
+        self.label_6.setGeometry(QtCore.QRect(20, 80, 370, 61))
         self.label_6.setStyleSheet("font: 20pt \"MV Boli\";\n"
 "background:#bebede;\n"
 "color:blue;\n"
 "border-radius:12px;")
         self.label_6.setObjectName("label_6")
 
+
         self.label_7 = QtWidgets.QLabel(self.centralwidget)
-        self.label_7.setGeometry(QtCore.QRect(590, 185, 130, 61))
+        self.label_7.setGeometry(QtCore.QRect(90, 346, 130, 61))
         self.label_7.setStyleSheet("font: 20pt \"MV Boli\";\n"
                                    "color:blue;\n"
                                    "border-radius:12px;")
@@ -96,14 +103,22 @@ class Ui_MainWindow(object):
 
         ##
         self.label_8 = QtWidgets.QLabel(self.centralwidget)
-        self.label_8.setGeometry(QtCore.QRect(620, 255, 110, 61))
+        self.label_8.setGeometry(QtCore.QRect(70, 410, 150, 61))
         self.label_8.setStyleSheet("font: 20pt \"MV Boli\";\n"
                                    "color:blue;\n"
                                    "border-radius:12px;")
         self.label_8.setObjectName("label_8")
-        self.label_8.hide()
+        #self.label_8.hide()
         ##
 
+        ##
+        self.label_9 = QtWidgets.QLabel(self.centralwidget)
+        self.label_9.setGeometry(QtCore.QRect(430, 80, 370, 61))
+        self.label_9.setStyleSheet("font: 20pt \"MV Boli\";\n"
+                                   "color:blue;\n"
+                                   "border-radius:12px;")
+        self.label_9.setObjectName("label_9")
+        ##
 
         self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_2.setGeometry(QtCore.QRect(30, 250, 191, 61))
@@ -121,6 +136,8 @@ class Ui_MainWindow(object):
 "\n"
 "border-radius:12px;")
         self.pushButton_3.setObjectName("pushButton_3")
+
+
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -130,8 +147,10 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
+
+
         self.progress = QtWidgets.QProgressBar(self.centralwidget)
-        self.progress.setGeometry(520, 240, 300, 25)
+        self.progress.setGeometry(30, 400, 300, 25)
         self.progress.setMaximum(1000)
         self.progress.setValue(0)
 
@@ -158,6 +177,7 @@ class Ui_MainWindow(object):
             t = text.split('\n')
             self.files.append(t)
 
+
     def build_series(self):
         for x in range(len(self.paths)):
             self.count+=1
@@ -175,14 +195,15 @@ class Ui_MainWindow(object):
 
 
     def select(self):
-        try:
-            self.label_8.hide()
+        # try:
+
             self.paths=list()
             self.library=DS.Series()
             self.count=0
             self.progress.setValue(0)
             file_path = filedialog.askdirectory()
             entries = os.listdir(file_path)
+            self.label_8.setText("Processing")
             for entry in entries:
                 i=entry.rfind('.')
                 t=entry[i+1:]
@@ -194,15 +215,15 @@ class Ui_MainWindow(object):
 
             self.progress.setMaximum(len(self.paths))
             self.build_series()
-            self.label_8.show()
+            self.label_8.setText("Done")
             #print(self.library.items())
 
 
 
-        except TypeError:
-            messagebox.showerror('Error', "Please make sure that the folder has txt files only")
-        except:
-            messagebox.showerror('Error',"Please select a folder")
+        # except TypeError:
+        #     messagebox.showerror('Error', "Please make sure that the folder has txt files only")
+        # except:
+        #     messagebox.showerror('Error',"Please select a folder")
 
     def search(self):
         """search for word in self.library using binary search
@@ -210,13 +231,22 @@ class Ui_MainWindow(object):
         self.print_text_box_value function
         if doesn't exit show a message box with (doesn't exit) message"""
         word=self.textEdit_7.toPlainText()
+        self.textEdit_8.clear()
         ##
         mySet=self.library.binary_search(word)
         if mySet == None:
             messagebox.showinfo("Error", "doesn't exit")
         else:
+            c=0
             for x in mySet:
-                self.print_text_box_value(x)
+                if c!=5:
+                    self.print_text_box_value(x)
+                    c+=1
+                path=self.paths[x]
+                t=path.rfind('/')
+                self.textEdit_8.insertPlainText(path[t+1:])
+                self.textEdit_8.insertPlainText("\n")
+
 
         ##
 
@@ -224,8 +254,9 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Text Search Tool"))
         self.label_6.setText(_translate("MainWindow", "  Enter the word here"))
-        self.label_7.setText(_translate("MainWindow", "Processing"))
-        self.label_8.setText(_translate("MainWindow", "Done"))
+        self.label_7.setText(_translate("MainWindow", "Status"))
+        self.label_8.setText(_translate("MainWindow", "Not Active"))
+        self.label_9.setText(_translate("MainWindow", "Files contain the Query word"))
         self.pushButton_2.setText(_translate("MainWindow", "Search"))
         self.pushButton_3.setText(_translate("MainWindow", "Select Folder"))
 

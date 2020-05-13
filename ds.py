@@ -115,6 +115,7 @@ class Ui_MainWindow(object):
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
         self.pushButton_3.clicked.connect(self.select)
+        self.pushButton_2.clicked.connect(self.search)
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
@@ -190,6 +191,15 @@ class Ui_MainWindow(object):
         except:
             messagebox.showerror('Error',"Please select a folder")
 
+    def search(self):
+        """search for word in self.library using binary search
+        if exit itterate throw the given value which is a set and for each index print the file using
+        self.print_text_box_value function
+        if doesn't exit show a message box with (doesn't exit) message"""
+        word=self.textEdit_7.toPlainText()
+        ##
+        #Your Code
+        ##
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate

@@ -66,6 +66,7 @@ class Ui_MainWindow(object):
         self.files=list()
         self.window=list()
         self.library=DS.Series()
+        self.count=0
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(845, 505)
@@ -84,6 +85,15 @@ class Ui_MainWindow(object):
 "color:blue;\n"
 "border-radius:12px;")
         self.label_6.setObjectName("label_6")
+
+        self.label_7 = QtWidgets.QLabel(self.centralwidget)
+        self.label_7.setGeometry(QtCore.QRect(580, 170, 110, 61))
+        self.label_7.setStyleSheet("font: 20pt \"MV Boli\";\n"
+                                   "background:#bebede;\n"
+                                   "color:blue;\n"
+                                   "border-radius:12px;")
+        self.label_7.setObjectName("label_7")
+
         self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_2.setGeometry(QtCore.QRect(30, 250, 191, 61))
         self.pushButton_2.setStyleSheet("font: 20pt \"MV Boli\";\n"
@@ -108,8 +118,16 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
+        self.progress = QtWidgets.QProgressBar(self.centralwidget)
+        self.progress.setGeometry(520, 240, 300, 25)
+        self.progress.setMaximum(1000)
+        self.progress.setValue(0)
+
     def print_text_box_value(self,x):
-        m=self.files[x]
+        f = open(self.paths[x], "r",encoding="utf8")
+        m = f.readlines()
+        f.close()
+
         path=self.paths[x]
         ind=path.rfind('/')
         title=path[ind+1:]
@@ -122,23 +140,34 @@ class Ui_MainWindow(object):
 
     def sent_tokenize(self):
         for file in self.paths:
-            f = open(file, 'r')
+            print(file)
+            f = open(file, 'r',encoding="utf8")
             text = f.read()
             t = text.split('\n')
             self.files.append(t)
 
     def build_series(self):
-        for x in range(len(self.files)):
-            for y in self.files[x]:
+        for x in range(len(self.paths)):
+            self.count+=1
+            self.progress.setValue(self.count)
+            #print(self.paths[x])
+            f = open(self.paths[x], "r", encoding="utf8")
+            file= f.readlines()
+            for y in file:
                 temp = y.split()
                 for z in temp:
                     after_edit = z.translate(str.maketrans('', '', string.punctuation))
                     if not after_edit == '':
                         self.library.insert_set(after_edit, x)
+            f.close()
 
 
     def select(self):
         try:
+            self.paths=list()
+            self.library=DS.Series()
+            self.count=0
+            self.progress.setValue(0)
             file_path = filedialog.askdirectory()
             entries = os.listdir(file_path)
             for entry in entries:
@@ -149,9 +178,10 @@ class Ui_MainWindow(object):
 
             for file in entries:
                 self.paths.append(file_path + '/' + file)
-            self.sent_tokenize()
+
+            self.progress.setMaximum(len(self.paths))
             self.build_series()
-            print(self.library.items())
+            #print(self.library.items())
 
 
 
@@ -165,6 +195,7 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Text Search Tool"))
         self.label_6.setText(_translate("MainWindow", "  Enter the word here"))
+        self.label_7.setText(_translate("MainWindow", "Progress"))
         self.pushButton_2.setText(_translate("MainWindow", "Search"))
         self.pushButton_3.setText(_translate("MainWindow", "Select Folder"))
 

@@ -1,3 +1,23 @@
+#Series Functions
+"""
+Series.find( key ) ##return the index of the given key
+Series.size()   ##return the size of series
+Series.binary_search( key ) ##return the value of the given key
+Series.is_empty()   ##return 1 if the series is empty
+Series.insert_order( key , value )  ##insert element in series if the key doesn't exist in it's order
+                                        & if the key exist update it's value
+Series.insert( key , value )    ##same as insert_order but the insertion is ranodm withoud order
+Series.delete( key )    ## delete the element with the key given
+Series.keys()   ##return list of keys
+Series.values() ##return list of values
+Series.items()  ##return list of tuples (key,value) ..useful to itterate
+Series.sort()   ##quick sort on the elements
+Series.update( index , value )  ##insert the value given the index
+
+For all the functions if any operation failed or the deletion happened for an element that doesn't exist
+the functions will return None...same for find & binary_search function
+"""
+
 class Node:
     def __init__(self,key=None,value=None):
         if(key == None):
@@ -181,15 +201,4 @@ class Series:
             t=(node.key,node.value)
             l.append(t)
         return l
-
-
-
-s=Series()
-s.insert("z",21)
-s.insert("salah",22)
-s.insert('zz',10)
-s.insert('l',10)
-s.sort()
-print(s.keys())
-print(s.values())
 

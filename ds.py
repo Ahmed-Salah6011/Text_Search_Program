@@ -9,11 +9,12 @@ import tkinter as tk
 from tkinter import filedialog
 from tkinter import messagebox
 from tkinter import *
+import Series as DS
+
 
 import os
 from PyQt5 import QtCore, QtGui, QtWidgets
 root = Tk()
-
 
 root.withdraw()
 class text_box(object):
@@ -125,7 +126,6 @@ class Ui_MainWindow(object):
 
     def select(self):
         try:
-
             file_path = filedialog.askdirectory()
             entries = os.listdir(file_path)
             for entry in entries:
@@ -137,6 +137,8 @@ class Ui_MainWindow(object):
             for file in entries:
                 self.paths.append(file_path + '/' + file)
             self.sent_tokenize()
+
+
 
         except TypeError:
             messagebox.showerror('Error', "Please make sure that the folder has txt files only")

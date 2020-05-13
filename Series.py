@@ -85,7 +85,7 @@ class Series:
 
             elif(self.N_list[self.middle].key>key):
                 self.end = self.middle - 1
-            return None
+        return None
 
 
 

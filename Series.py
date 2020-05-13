@@ -75,7 +75,7 @@ class Series:
         self.i=start
         self.j=end
         self.pivot=self.i
-        for m in range(len(self.N_list)-1):
+        for m in range(end):
             if(self.N_list[self.pivot].key>self.N_list[self.j].key ):
                 self.N_list[self.j], self.N_list[self.pivot] = self.N_list[self.pivot], self.N_list[self.j]
                 self.pivot = self.j
@@ -129,11 +129,11 @@ class Series:
         first check if the key existed or not
         if existed : update the value of existed key with (val)
         if not existed : create new node with the key & val then insert the node in the N_list"""
-        x=self.find(key)
+        x=self.find(Key)
         if(x!=None):
-            self.N_list[x].value=val
+            self.N_list[x].value=Val
         else:
-            q=Node(key,val)
+            q=Node(Key,Val)
             self.N_list.append(q)
 
 
@@ -182,11 +182,13 @@ class Series:
         return l
 
 
-<<<<<<< HEAD
-=======
+
 s=Series()
-s.insert("fatma",21)
+s.insert("z",21)
 s.insert("salah",22)
+s.insert('zz',10)
+s.insert('l',10)
+s.sort(0,s.size()-1)
 print(s.keys())
 print(s.values())
->>>>>>> 371d350e9198aa4e2576eb1899cfb035ebc64c70
+

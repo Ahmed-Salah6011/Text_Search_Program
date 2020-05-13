@@ -198,7 +198,13 @@ class Ui_MainWindow(object):
         if doesn't exit show a message box with (doesn't exit) message"""
         word=self.textEdit_7.toPlainText()
         ##
-        #Your Code
+        mySet=self.library.binary_search(word)
+        if mySet == None:
+            messagebox.showinfo("Error", "doesn't exit")
+        else:
+            for x in mySet:
+                self.print_text_box_value(x)
+
         ##
 
     def retranslateUi(self, MainWindow):

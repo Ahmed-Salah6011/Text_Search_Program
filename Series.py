@@ -129,6 +129,15 @@ class Series:
         first check if the key existed or not
         if existed : update the value of existed key with (val)
         if not existed : create new node with the key & val then insert the node in the N_list"""
+        x=self.find(key)
+        if(x!=None):
+            self.N_list[x].value=val
+        else:
+            q=Node(key,val)
+            self.N_list.append(q)
+
+
+
 
 
     def delete(self,key):
@@ -145,9 +154,17 @@ class Series:
 
     def keys(self):
         """get list of all keys"""
+        l=list()
+        for i in range(len(self.N_list)):
+            l.append(self.N_list[i].key)
+        return l
 
     def values(self):
         """get list of all values"""
+        f=list()
+        for i in range (len(self.N_list)):
+            f.append(self.N_list[i].value)
+        return f
 
 
 
@@ -165,3 +182,11 @@ class Series:
         return l
 
 
+<<<<<<< HEAD
+=======
+s=Series()
+s.insert("fatma",21)
+s.insert("salah",22)
+print(s.keys())
+print(s.values())
+>>>>>>> 371d350e9198aa4e2576eb1899cfb035ebc64c70

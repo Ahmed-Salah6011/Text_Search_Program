@@ -247,20 +247,23 @@ class Ui_MainWindow(object):
             messagebox.showerror('Error',"Please select a folder")
 
     def show_more(self):
-        c=0
-        l = len(self.mySet)
-        while(1):
+        try:
+            c=0
+            l = len(self.mySet)
+            while(1):
 
-            if(self.index == l):
-                messagebox.showinfo("Info","No more files")
-                break
-            if (c==2):
-                break
-            self.print_text_box_value(self.index)
-            self.index+=1
-            if(self.index ==l ):
-                break
-            c+=1
+                if(self.index == l):
+                    messagebox.showinfo("Info","No more files")
+                    break
+                if (c==2):
+                    break
+                self.print_text_box_value(self.index)
+                self.index+=1
+                if(self.index ==l ):
+                    break
+                c+=1
+        except:
+            messagebox.showerror('Error',"Please select a folder")   
 
 
     def search(self):

@@ -145,7 +145,7 @@ class Ui_MainWindow(object):
 
         ##
         self.pushButton_4 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_4.setGeometry(QtCore.QRect(515, 350, 200, 45))
+        self.pushButton_4.setGeometry(QtCore.QRect(515, 360, 200, 45))
         self.pushButton_4.setStyleSheet("font: 20pt \"MV Boli\";\n"
                                         "background:#bebede;\n"
                                         "color:blue;\n"

@@ -205,6 +205,7 @@ class Ui_MainWindow(object):
                 for z in temp:
                     after_edit = z.translate(str.maketrans('', '', string.punctuation))
                     if not after_edit == '':
+                        after_edit=after_edit.lower()
                         self.library.insert_set(after_edit, x)
             f.close()
 
@@ -264,6 +265,7 @@ class Ui_MainWindow(object):
         if doesn't exit show a message box with (doesn't exit) message"""
         self.index=0
         word=self.textEdit_7.toPlainText()
+        word=word.lower()
         self.textEdit_8.clear()
         ##
         self.mySet=self.library.binary_search(word)

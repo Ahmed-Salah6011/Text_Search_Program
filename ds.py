@@ -76,16 +76,20 @@ class Ui_MainWindow(object):
         self.centralwidget.setObjectName("centralwidget")
         self.textEdit_7 = QtWidgets.QTextEdit(self.centralwidget)
         self.textEdit_7.setGeometry(QtCore.QRect(30, 160, 341, 61))
-        self.textEdit_7.setStyleSheet("font: 14pt \"MS Shell Dlg 2\";")
+        self.textEdit_7.setStyleSheet("font: 14pt \"MS Shell Dlg 2\";\n"
+"border: 1px solid; border-radius:10px; background-color: palette(base);\n"
+"")
         self.textEdit_7.setObjectName("textEdit_7")
         ##
         self.textEdit_8 = QtWidgets.QTextEdit(self.centralwidget)
-        self.textEdit_8.setGeometry(QtCore.QRect(440, 140, 341, 200))
-        self.textEdit_8.setStyleSheet("font: 14pt \"MS Shell Dlg 2\";")
+        self.textEdit_8.setGeometry(QtCore.QRect(440, 150, 341, 200))
+        self.textEdit_8.setStyleSheet("font: 14pt \"MS Shell Dlg 2\";\n"
+"border: 1px solid; border-radius:10px; background-color: palette(base);\n"
+"")
         self.textEdit_8.setObjectName("textEdit_8")
         ##
         self.label_6 = QtWidgets.QLabel(self.centralwidget)
-        self.label_6.setGeometry(QtCore.QRect(20, 80, 370, 61))
+        self.label_6.setGeometry(QtCore.QRect(20, 80, 350, 61))
         self.label_6.setStyleSheet("font: 20pt \"MV Boli\";\n"
 "background:#bebede;\n"
 "color:blue;\n"
@@ -113,10 +117,11 @@ class Ui_MainWindow(object):
 
         ##
         self.label_9 = QtWidgets.QLabel(self.centralwidget)
-        self.label_9.setGeometry(QtCore.QRect(430, 80, 370, 61))
+        self.label_9.setGeometry(QtCore.QRect(430, 80, 410, 61))
         self.label_9.setStyleSheet("font: 20pt \"MV Boli\";\n"
-                                   "color:blue;\n"
-                                   "border-radius:12px;")
+"background:#bebede;\n"
+"color:blue;\n"
+"border-radius:12px;")
         self.label_9.setObjectName("label_9")
         ##
 
@@ -256,7 +261,7 @@ class Ui_MainWindow(object):
         self.label_6.setText(_translate("MainWindow", "  Enter the word here"))
         self.label_7.setText(_translate("MainWindow", "Status"))
         self.label_8.setText(_translate("MainWindow", "Not Active"))
-        self.label_9.setText(_translate("MainWindow", "Files contain the Query word"))
+        self.label_9.setText(_translate("MainWindow", " Files contain the Query word"))
         self.pushButton_2.setText(_translate("MainWindow", "Search"))
         self.pushButton_3.setText(_translate("MainWindow", "Select Folder"))
 

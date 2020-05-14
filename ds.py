@@ -67,6 +67,7 @@ class Ui_MainWindow(object):
         self.window=list()
         self.library=DS.Series()
         self.count=0
+        self.index=0
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(845, 505)
@@ -129,13 +130,26 @@ class Ui_MainWindow(object):
 "border-radius:12px;")
         self.pushButton_2.setObjectName("pushButton_2")
         self.pushButton_3 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_3.setGeometry(QtCore.QRect(420, 370, 301, 61))
+        self.pushButton_3.setGeometry(QtCore.QRect(420, 420, 301, 61))
         self.pushButton_3.setStyleSheet("font: 20pt \"MV Boli\";\n"
 "background:#bebede;\n"
 "color:blue;\n"
 "\n"
 "border-radius:12px;")
         self.pushButton_3.setObjectName("pushButton_3")
+
+        ##
+        self.pushButton_4 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_4.setGeometry(QtCore.QRect(515, 350, 200, 45))
+        self.pushButton_4.setStyleSheet("font: 20pt \"MV Boli\";\n"
+                                        "background:#bebede;\n"
+                                        "color:blue;\n"
+                                        "\n"
+                                        "border-radius:12px;")
+        self.pushButton_4.setObjectName("pushButton_4")
+        #self.pushButton_4.setEnabled(False)
+        ##
+
 
 
         MainWindow.setCentralWidget(self.centralwidget)
@@ -144,6 +158,7 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
         self.pushButton_3.clicked.connect(self.select)
         self.pushButton_2.clicked.connect(self.search)
+        self.pushButton_4.clicked.connect(self.show_more)
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
@@ -195,7 +210,7 @@ class Ui_MainWindow(object):
 
 
     def select(self):
-        # try:
+        try:
 
             self.paths=list()
             self.library=DS.Series()
@@ -220,28 +235,48 @@ class Ui_MainWindow(object):
 
 
 
-        # except TypeError:
-        #     messagebox.showerror('Error', "Please make sure that the folder has txt files only")
-        # except:
-        #     messagebox.showerror('Error',"Please select a folder")
+        except TypeError:
+            messagebox.showerror('Error', "Please make sure that the folder has txt files only")
+        except:
+            messagebox.showerror('Error',"Please select a folder")
+
+    def show_more(self):
+        c=0
+        l = len(self.mySet)
+        while(1):
+
+            if(self.index == l):
+                messagebox.showinfo("Info","No more files")
+                break
+            if (c==2):
+                break
+            self.print_text_box_value(self.index)
+            self.index+=1
+            if(self.index ==l ):
+                break
+            c+=1
+
 
     def search(self):
         """search for word in self.library using binary search
         if exit itterate throw the given value which is a set and for each index print the file using
         self.print_text_box_value function
         if doesn't exit show a message box with (doesn't exit) message"""
+        self.index=0
         word=self.textEdit_7.toPlainText()
         self.textEdit_8.clear()
         ##
-        mySet=self.library.binary_search(word)
-        if mySet == None:
+        self.mySet=self.library.binary_search(word)
+        if self.mySet == None:
             messagebox.showinfo("Error", "doesn't exit")
         else:
             c=0
-            for x in mySet:
-                if c!=5:
+            for x in self.mySet:
+                if c<2:
                     self.print_text_box_value(x)
                     c+=1
+                    self.index+=1
+
                 path=self.paths[x]
                 t=path.rfind('/')
                 self.textEdit_8.insertPlainText(path[t+1:])
@@ -259,6 +294,7 @@ class Ui_MainWindow(object):
         self.label_9.setText(_translate("MainWindow", "Files contain the Query word"))
         self.pushButton_2.setText(_translate("MainWindow", "Search"))
         self.pushButton_3.setText(_translate("MainWindow", "Select Folder"))
+        self.pushButton_4.setText(_translate("MainWindow", "Show More"))
 
 
 if __name__ == "__main__":

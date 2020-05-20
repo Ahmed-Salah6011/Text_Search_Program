@@ -255,7 +255,7 @@ class Ui_MainWindow(object):
                 if(self.index == l):
                     messagebox.showinfo("Info","No more files")
                     break
-                if (c==2):
+                if (c==5):
                     break
                 self.print_text_box_value(self.index)
                 self.index+=1
@@ -276,13 +276,14 @@ class Ui_MainWindow(object):
         word=word.lower()
         self.textEdit_8.clear()
         ##
+        self.mySet=set()
         self.mySet=self.library.binary_search(word)
         if self.mySet == None:
             messagebox.showinfo("Error", "doesn't exit")
         else:
             c=0
             for x in self.mySet:
-                if c<2:
+                if c<5:
                     self.print_text_box_value(x)
                     c+=1
                     self.index+=1

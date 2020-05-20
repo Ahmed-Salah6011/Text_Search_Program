@@ -250,6 +250,7 @@ class Ui_MainWindow(object):
         try:
             c=0
             l = len(self.mySet)
+            s=list(self.mySet)
             while(1):
 
                 if(self.index == l):
@@ -257,7 +258,7 @@ class Ui_MainWindow(object):
                     break
                 if (c==5):
                     break
-                self.print_text_box_value(self.index)
+                self.print_text_box_value(s(self.index))
                 self.index+=1
                 if(self.index ==l ):
                     break

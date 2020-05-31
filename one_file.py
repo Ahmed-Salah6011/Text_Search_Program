@@ -1,0 +1,550 @@
+# -*- coding: utf-8 -*-
+
+# Form implementation generated from reading ui file 'DS.ui'
+#
+# Created by: PyQt5 UI code generator 5.14.1
+#
+# WARNING! All changes made in this file will be lost!
+####################
+#Series Functions
+"""
+Series.find( key ) ##return the index of the given key
+Series.size()   ##return the size of series
+Series.binary_search( key ) ##return the value of the given key
+Series.is_empty()   ##return 1 if the series is empty
+Series.insert_order( key , value )  ##insert element in series if the key doesn't exist in it's order
+                                        & if the key exist update it's value
+Series.insert( key , value )    ##same as insert_order but the insertion is ranodm withoud order
+Series.delete( key )    ## delete the element with the key given
+Series.keys()   ##return list of keys
+Series.values() ##return list of values
+Series.items()  ##return list of tuples (key,value) ..useful to itterate
+Series.sort()   ##quick sort on the elements
+Series.update( index , value )  ##insert the value given the index
+
+For all the functions if any operation failed or the deletion happened for an element that doesn't exist
+the functions will return None...same for find & binary_search function
+"""
+
+class Node:
+    def __init__(self,key=None,value=None):
+        if(key == None):
+            self.key=None
+        else:
+            self.key=key
+        ###
+        if (value == None):
+            self.value = None
+        else:
+            self.value = value
+
+    def __str__(self):
+        return """({}:{})""".format(self.key,self.value)
+
+    def __repr__(self):
+        return """({}:{})""".format(self.key,self.value)
+
+
+############################
+
+class Series:
+    def __init__(self,Nodes_list=None):
+        if(Nodes_list== None):
+            self.N_list=list()
+        else:
+            self.N_list=list(Nodes_list)
+
+
+    def find(self,key):
+        """search the elements & return the index of the list"""
+        if(self.is_empty()):
+            return None
+        else:
+            low=0
+            high=len(self.N_list)-1
+            while(low<=high):
+                mid=(low+high)//2
+                if(self.N_list[mid].key == key):
+                    return mid
+
+                elif (key > self.N_list[mid].key ):
+                    low=mid+1
+
+                else:
+                    high=mid-1
+
+            return None
+
+    def size(self):
+        """get the length of the list"""
+        return len(self.N_list)
+
+    def binary_search(self,key):
+        """find the element with the given key & return val if the key exist and
+        if not exist return None"""
+        self.start=0
+        self.end=self.size()-1
+        while(self.start<=self.end):
+            self.middle=int((self.start+self.end)/2)
+            if(self.N_list[self.middle].key==key):
+                return self.N_list[self.middle].value
+            elif(self.N_list[self.middle].key<key):
+                self.start=self.middle+1
+
+            elif(self.N_list[self.middle].key>key):
+                self.end = self.middle - 1
+        return None
+
+
+
+    def partition(self,start,end):
+        """this function will help me in quick_sorting"""
+        self.i=start
+        self.j=end
+        self.pivot=self.i
+        for m in range(end-start):
+            if(self.N_list[self.pivot].key>self.N_list[self.j].key ):
+                self.N_list[self.j], self.N_list[self.pivot] = self.N_list[self.pivot], self.N_list[self.j]
+                self.pivot = self.j
+                self.i = self.i + 1
+            elif(self.N_list[self.pivot].key < self.N_list[self.i].key):
+                self.N_list[self.i], self.N_list[self.pivot] = self.N_list[self.pivot], self.N_list[self.i]
+                self.pivot = self.i
+                self.j = self.j - 1
+            else:
+                if(self.pivot==self.i and self.j!=self.i):
+                    self.j = self.j - 1
+                elif(self.pivot==self.j and self.j!=self.i):
+                    self.i = self.i + 1
+        return self.pivot
+
+    def sort(self):
+        self.sort_ex(0,self.size()-1)
+
+    def sort_ex(self,start,end):
+        """sort the elements by key"""
+        if(start<end):
+            piv=self.partition(start,end)
+            self.sort_ex(start,piv-1)
+            self.sort_ex(piv+1, end)
+
+
+    def insert_order(self,key,val):
+        """take key & value
+        first check if the key existed or not
+        if existed : update the value of existed key with (val)
+        if not existed : create new node with the key & val then insert the node (in order) in the N_list"""
+        ind=self.find(key)
+        if(ind != None): ##key exist
+            self.N_list[ind].value=val
+        else:
+            n=Node(key,val)
+            if (self.is_empty()):
+                self.N_list.append(n)
+            else:
+                old = len(self.N_list)
+                for i in range(len(self.N_list)):
+                    if self.N_list[i].key > key:
+                        self.N_list.insert(i,n)
+                        break
+                if (old == len(self.N_list)):
+                    self.N_list.append(n)
+
+    def insert_set(self,key,file_id):
+        """take key & value
+        first check if the key existed or not
+        if existed : update the value of existed key with (val)
+        if not existed : create new node with the key & val then insert the node (in order) in the N_list"""
+        ind=self.find(key)
+        if(ind != None): ##key exist
+            self.N_list[ind].value.add(file_id)
+        else:
+            s={file_id}
+            n=Node(key,s)
+            if (self.is_empty()):
+                self.N_list.append(n)
+            else:
+                old=len(self.N_list)
+                for i in range(len(self.N_list)):
+                    if self.N_list[i].key > key:
+                        self.N_list.insert(i,n)
+                        break
+                if(old == len(self.N_list)):
+                    self.N_list.append(n)
+
+
+
+    def update(self,index,val):
+        """update the series by index"""
+        self.N_list[index].value=val
+
+    def insert(self,Key,Val):
+        """take key & value
+        first check if the key existed or not
+        if existed : update the value of existed key with (val)
+        if not existed : create new node with the key & val then insert the node in the N_list"""
+        x=self.find(Key)
+        if(x!=None):
+            self.N_list[x].value=Val
+        else:
+            q=Node(Key,Val)
+            self.N_list.append(q)
+
+    def delete(self,key):
+        """delete the element with the given key from the N_list"""
+        if (self.is_empty()):
+            return -1
+        else:
+            ind=self.find(key)
+            if(ind != None):
+                del self.N_list[ind]
+                return 1
+            else:
+                return -1
+
+    def keys(self):
+        """get list of all keys"""
+        l=list()
+        for i in range(len(self.N_list)):
+            l.append(self.N_list[i].key)
+        return l
+
+    def values(self):
+        """get list of all values"""
+        f=list()
+        for i in range (len(self.N_list)):
+            f.append(self.N_list[i].value)
+        return f
+
+
+
+    def is_empty(self):
+        """check if the series is empty"""
+        return self.size()==0
+
+    def items(self):
+        """return list of tuples (key,value)
+         for traversing through it"""
+        l=list()
+        for node in self.N_list:
+            t=(node.key,node.value)
+            l.append(t)
+        return l
+
+
+
+
+
+###################
+import tkinter as tk
+from tkinter import filedialog
+from tkinter import messagebox
+from tkinter import *
+import string
+
+
+
+import os
+from PyQt5 import QtCore, QtGui, QtWidgets
+root = Tk()
+
+root.withdraw()
+class text_box(object):
+    def __init__(self, title, text=None):
+        if text == None:
+            self.Text = list()
+        else:
+            self.Text = list(text)
+        self.Title=str(title)
+    def setupUi(self, MainWindow):
+        MainWindow.setObjectName("MainWindow")
+        MainWindow.resize(800, 800)
+        self.centralwidget = QtWidgets.QWidget(MainWindow)
+        self.centralwidget.setObjectName("centralwidget")
+        self.textEdit = QtWidgets.QTextEdit(self.centralwidget)
+        self.textEdit.setGeometry(QtCore.QRect(100, 100, 600, 500))
+        self.textEdit.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
+        self.textEdit.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
+        self.textEdit.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContentsOnFirstShow)
+        self.textEdit.setObjectName("textEdit")
+        MainWindow.setCentralWidget(self.centralwidget)
+        self.menubar = QtWidgets.QMenuBar(MainWindow)
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 21))
+        self.menubar.setObjectName("menubar")
+        MainWindow.setMenuBar(self.menubar)
+        self.statusbar = QtWidgets.QStatusBar(MainWindow)
+        self.statusbar.setObjectName("statusbar")
+        MainWindow.setStatusBar(self.statusbar)
+        self.print()
+        self.retranslateUi(MainWindow)
+        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+    def print(self):
+        for i in range(len(self.Text)):
+           self.textEdit.insertPlainText (self.Text[i])
+           self.textEdit.insertPlainText("\n")
+
+    def retranslateUi(self, MainWindow):
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate("MainWindow", self.Title))
+
+
+
+
+class Ui_MainWindow(object):
+    def __init__(self):
+        self.paths = list()
+        self.files=list()
+        self.window=list()
+        self.library=Series()
+        self.count=0
+        self.index=0
+    def setupUi(self, MainWindow):
+        MainWindow.setObjectName("MainWindow")
+        MainWindow.resize(845, 505)
+        MainWindow.setFixedSize(845, 505)
+        MainWindow.setStyleSheet("")
+        self.centralwidget = QtWidgets.QWidget(MainWindow)
+        self.centralwidget.setObjectName("centralwidget")
+        self.textEdit_7 = QtWidgets.QTextEdit(self.centralwidget)
+        self.textEdit_7.setGeometry(QtCore.QRect(30, 160, 341, 61))
+        self.textEdit_7.setStyleSheet("font: 14pt \"MS Shell Dlg 2\";\n"
+"border: 1px solid; border-radius:10px; background-color: palette(base);\n"
+"")
+        self.textEdit_7.setObjectName("textEdit_7")
+        ##
+        self.textEdit_8 = QtWidgets.QTextEdit(self.centralwidget)
+        self.textEdit_8.setGeometry(QtCore.QRect(440, 150, 341, 200))
+        self.textEdit_8.setStyleSheet("font: 14pt \"MS Shell Dlg 2\";\n"
+"border: 1px solid; border-radius:10px; background-color: palette(base);\n"
+"")
+        self.textEdit_8.setObjectName("textEdit_8")
+        ##
+        self.label_6 = QtWidgets.QLabel(self.centralwidget)
+        self.label_6.setGeometry(QtCore.QRect(20, 80, 350, 61))
+        self.label_6.setStyleSheet("font: 20pt \"MV Boli\";\n"
+"background:#bebede;\n"
+"color:blue;\n"
+"border-radius:12px;")
+        self.label_6.setObjectName("label_6")
+
+
+        self.label_7 = QtWidgets.QLabel(self.centralwidget)
+        self.label_7.setGeometry(QtCore.QRect(90, 346, 130, 61))
+        self.label_7.setStyleSheet("font: 20pt \"MV Boli\";\n"
+                                   "color:blue;\n"
+                                   "border-radius:12px;")
+        self.label_7.setObjectName("label_7")
+
+
+        ##
+        self.label_8 = QtWidgets.QLabel(self.centralwidget)
+        self.label_8.setGeometry(QtCore.QRect(70, 410, 150, 61))
+        self.label_8.setStyleSheet("font: 20pt \"MV Boli\";\n"
+                                   "color:blue;\n"
+                                   "border-radius:12px;")
+        self.label_8.setObjectName("label_8")
+        #self.label_8.hide()
+        ##
+
+        ##
+        self.label_9 = QtWidgets.QLabel(self.centralwidget)
+        self.label_9.setGeometry(QtCore.QRect(430, 80, 410, 61))
+        self.label_9.setStyleSheet("font: 20pt \"MV Boli\";\n"
+"background:#bebede;\n"
+"color:blue;\n"
+"border-radius:12px;")
+        self.label_9.setObjectName("label_9")
+        ##
+
+        self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_2.setGeometry(QtCore.QRect(30, 250, 191, 61))
+        self.pushButton_2.setStyleSheet("font: 20pt \"MV Boli\";\n"
+"background:#bebede;\n"
+"color:blue;\n"
+"\n"
+"border-radius:12px;")
+        self.pushButton_2.setObjectName("pushButton_2")
+        self.pushButton_3 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_3.setGeometry(QtCore.QRect(420, 420, 301, 61))
+        self.pushButton_3.setStyleSheet("font: 20pt \"MV Boli\";\n"
+"background:#bebede;\n"
+"color:blue;\n"
+"\n"
+"border-radius:12px;")
+        self.pushButton_3.setObjectName("pushButton_3")
+
+        ##
+        self.pushButton_4 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_4.setGeometry(QtCore.QRect(515, 360, 200, 45))
+        self.pushButton_4.setStyleSheet("font: 20pt \"MV Boli\";\n"
+                                        "background:#bebede;\n"
+                                        "color:blue;\n"
+                                        "\n"
+                                        "border-radius:12px;")
+        self.pushButton_4.setObjectName("pushButton_4")
+        #self.pushButton_4.setEnabled(False)
+        ##
+
+
+
+        MainWindow.setCentralWidget(self.centralwidget)
+        self.statusbar = QtWidgets.QStatusBar(MainWindow)
+        self.statusbar.setObjectName("statusbar")
+        MainWindow.setStatusBar(self.statusbar)
+        self.pushButton_3.clicked.connect(self.select)
+        self.pushButton_2.clicked.connect(self.search)
+        self.pushButton_4.clicked.connect(self.show_more)
+        self.retranslateUi(MainWindow)
+        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+
+
+        self.progress = QtWidgets.QProgressBar(self.centralwidget)
+        self.progress.setGeometry(30, 400, 300, 25)
+        self.progress.setMaximum(1000)
+        self.progress.setValue(0)
+
+    def print_text_box_value(self,x):
+        f = open(self.paths[x], "r",encoding="utf8")
+        m = f.readlines()
+        f.close()
+
+        path=self.paths[x]
+        ind=path.rfind('/')
+        title=path[ind+1:]
+
+        self.window.append(QtWidgets.QMainWindow())
+        self.ui = text_box(title,m)
+        self.ui.setupUi(self.window[len(self.window)-1])
+        self.window[len(self.window)-1].show()
+
+
+    def sent_tokenize(self):
+        for file in self.paths:
+            print(file)
+            f = open(file, 'r',encoding="utf8")
+            text = f.read()
+            t = text.split('\n')
+            self.files.append(t)
+
+
+    def build_series(self):
+        for x in range(len(self.paths)):
+            self.count+=1
+            self.progress.setValue(self.count)
+            #print(self.paths[x])
+            f = open(self.paths[x], "r", encoding="utf8")
+            file= f.readlines()
+            for y in file:
+                temp = y.split()
+                for z in temp:
+                    after_edit = z.translate(str.maketrans('', '', string.punctuation))
+                    if not after_edit == '':
+                        after_edit=after_edit.lower()
+                        self.library.insert_set(after_edit, x)
+            f.close()
+
+
+    def select(self):
+        try:
+
+            self.paths=list()
+            self.library=Series()
+            self.count=0
+            self.progress.setValue(0)
+            file_path = filedialog.askdirectory()
+            entries = os.listdir(file_path)
+            self.label_8.setText("Processing")
+            for entry in entries:
+                i=entry.rfind('.')
+                t=entry[i+1:]
+                if(t != 'txt'):
+                    raise TypeError
+
+            for file in entries:
+                self.paths.append(file_path + '/' + file)
+
+            self.progress.setMaximum(len(self.paths))
+            self.build_series()
+            self.label_8.setText("Done")
+            #print(self.library.items())
+
+
+
+        except TypeError:
+            messagebox.showerror('Error', "Please make sure that the folder has txt files only")
+        except:
+            messagebox.showerror('Error',"Please select a folder")
+
+    def show_more(self):
+        try:
+            c=0
+            l = len(self.mySet)
+            s=list(self.mySet)
+            while(1):
+
+                if(self.index == l):
+                    messagebox.showinfo("Info","No more files")
+                    break
+                if (c==5):
+                    break
+                self.print_text_box_value(s[self.index])
+                self.index+=1
+                if(self.index ==l ):
+                    break
+                c+=1
+        except:
+            messagebox.showerror('Error',"Please select a folder")   
+
+
+    def search(self):
+        """search for word in self.library using binary search
+        if exit itterate throw the given value which is a set and for each index print the file using
+        self.print_text_box_value function
+        if doesn't exit show a message box with (doesn't exit) message"""
+        self.index=0
+        word=self.textEdit_7.toPlainText()
+        word=word.lower()
+        self.textEdit_8.clear()
+        ##
+        self.mySet=set()
+        self.mySet=self.library.binary_search(word)
+        if self.mySet == None:
+            messagebox.showinfo("Error", "doesn't exit")
+        else:
+            c=0
+            for x in self.mySet:
+                if c<5:
+                    self.print_text_box_value(x)
+                    c+=1
+                    self.index+=1
+
+                path=self.paths[x]
+                t=path.rfind('/')
+                self.textEdit_8.insertPlainText(path[t+1:])
+                self.textEdit_8.insertPlainText("\n")
+
+
+        ##
+
+    def retranslateUi(self, MainWindow):
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate("MainWindow", "Text Search Tool"))
+        self.label_6.setText(_translate("MainWindow", "  Enter the word here"))
+        self.label_7.setText(_translate("MainWindow", "Status"))
+        self.label_8.setText(_translate("MainWindow", "Not Active"))
+        self.label_9.setText(_translate("MainWindow", " Files contain the Query word"))
+        self.pushButton_2.setText(_translate("MainWindow", "Search"))
+        self.pushButton_3.setText(_translate("MainWindow", "Select Folder"))
+        self.pushButton_4.setText(_translate("MainWindow", "Show More"))
+
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    MainWindow = QtWidgets.QMainWindow()
+    ui = Ui_MainWindow()
+    ui.setupUi(MainWindow)
+    MainWindow.show()
+    mainloop()
+    sys.exit(app.exec_())
